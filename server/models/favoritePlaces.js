@@ -14,6 +14,8 @@ const FavoritePlacesSchema = new Schema({
     whose: String
 })
 
+FavoritePlacesSchema.index({ location: '2dsphere' });
+
 export const FavoritePlaces = mongoose.model("favoritePlaces", FavoritePlacesSchema)
 
 export async function getAllFavoritePlaces(){
