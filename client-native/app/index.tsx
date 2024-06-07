@@ -32,6 +32,7 @@ export default function Index() {
           <Text style={styles.favePerson}>by: {favePlace.whose}</Text>
         </View>
       ))}
+      { loadError && <Text>{loadError.message}</Text>}
     </View>
   );
 }
