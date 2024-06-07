@@ -23,7 +23,10 @@ export default function Index() {
     >
       <Text style={styles.title}>Favorites List</Text>
       { favorites.map((favePlace) => (
-        <View key={favePlace._id}>
+        <View 
+          key={favePlace._id}
+          style={styles.faveCard}
+        >
           <Text style={styles.faveTitle}>{favePlace.name}</Text>
           <View style={styles.faveLocationRow}>
             <FontAwesome5 name="globe" size={12} color="black" />
@@ -40,6 +43,10 @@ export default function Index() {
 const styles = StyleSheet.create({
   title: {
     fontSize: 24
+  },
+  faveCard: {
+    width: '100%',
+    margin: 5
   },
   faveTitle: {
     fontSize: 20

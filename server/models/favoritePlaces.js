@@ -32,3 +32,15 @@ export async function createFavoritePlace(name, latitude, longitude, whose) {
         whose
     })
 }
+
+export async function findFavoritesNear(latitude, longitude, rangeM) {
+    return FavoritePlaces.find({
+        location: {
+            $near: {
+                $geometry: { type: "Point", coordinates: [ longitude, latitude]},
+                $minDistance: 0,
+                $maxDistance: rangeM
+            }
+        }
+    })
+}
