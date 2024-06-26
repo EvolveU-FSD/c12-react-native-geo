@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { useCallback, useEffect, useState } from "react";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { getAllFavorites } from '../api.js';
 
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import MapView, { Marker } from "react-native-maps";
+import FavoriteModal from "@/components/FavoriteModal";
 
 export default function Index() {
 
@@ -18,10 +19,16 @@ export default function Index() {
   })
 
   const [userClick, setUserClick] = useState()
+  const [showFavorite, setShowFavorite] = useState(false)
+
 
   useEffect(() => {
     getAllFavorites().then(setFavorites).catch(setLoadError)
   }, [])
+
+  const saveFavorite = useCallback(() => {
+    setShowFavorite(true)
+  }, [userClick])
 
   function favoriteClicked(fave) {
     setMapRegion({
@@ -53,9 +60,11 @@ export default function Index() {
         />
         { userClick && (
           <Marker 
-            title="You clicked here!"
-            description="Maybe a favorite?"
+            title="Click here"
+            description="To save a new favorite"
             coordinate={userClick}
+            onCalloutPress={saveFavorite}
+            pinColor="#008000"
           />
         )}
 
@@ -72,25 +81,30 @@ export default function Index() {
         ))}
       </MapView>
       <Text style={styles.title}>Favorites List</Text>
-      { favorites.map((favePlace) => (
-        <View 
-          key={favePlace._id}
-          style={styles.faveCard}
-        >
-          <Text 
-            onPress={() => { favoriteClicked(favePlace) }}
-            style={styles.faveTitle}
+      <ScrollView>
+        { favorites.map((favePlace) => (
+          <View 
+            key={favePlace._id}
+            style={styles.faveCard}
           >
-            {favePlace.name}
-          </Text>
-          <View style={styles.faveLocationRow}>
-            <FontAwesome5 name="globe" size={12} color="black" />
-            <Text style={styles.faveCoords}>{favePlace.location.coordinates[1]}, {favePlace.location.coordinates[0]}</Text>
+            <Text 
+              onPress={() => { favoriteClicked(favePlace) }}
+              style={styles.faveTitle}
+            >
+              {favePlace.name}
+            </Text>
+            <View style={styles.faveLocationRow}>
+              <FontAwesome5 name="globe" size={12} color="black" />
+              <Text style={styles.faveCoords}>{favePlace.location.coordinates[1]}, {favePlace.location.coordinates[0]}</Text>
+            </View>
+            <Text style={styles.favePerson}>by: {favePlace.whose}</Text>
           </View>
-          <Text style={styles.favePerson}>by: {favePlace.whose}</Text>
-        </View>
-      ))}
+        ))}
+      </ScrollView>
       { loadError && <Text>{loadError.message}</Text>}
+
+      <FavoriteModal visible={showFavorite} onClose={() => setShowFavorite(false)}/>
+
     </View>
   );
 }
