@@ -5,6 +5,7 @@ import { getAllFavorites } from '../api.js';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import MapView, { Marker } from "react-native-maps";
 import FavoriteModal from "@/components/FavoriteModal";
+import { LoginProvider } from "@/components/LoginContext";
 
 export default function Index() {
 
@@ -40,72 +41,73 @@ export default function Index() {
   }
 
   return (
-    <View
-      style={{
-        flex: 1,
-      }}
-    >
-      <MapView 
-        style={styles.map}
-        region={mapRegion}
-        onPress={(e) => {
-          console.log('User clicked at', e.nativeEvent.coordinate)
-          setUserClick(e.nativeEvent.coordinate)
+      <View
+        style={{
+          flex: 1,
         }}
       >
-        <Marker 
-          title="Central Library"
-          description="Margo's Favorite"
-          coordinate={{latitude: 51.04560343757784, longitude: -114.05404581689704 }}
-        />
-        { userClick && (
+        <MapView 
+          style={styles.map}
+          region={mapRegion}
+          onPress={(e) => {
+            console.log('User clicked at', e.nativeEvent.coordinate)
+            setUserClick(e.nativeEvent.coordinate)
+          }}
+        >
           <Marker 
-            title="Click here"
-            description="To save a new favorite"
-            coordinate={userClick}
-            onCalloutPress={saveFavorite}
-            pinColor="#008000"
+            title="Central Library"
+            description="Margo's Favorite"
+            coordinate={{latitude: 51.04560343757784, longitude: -114.05404581689704 }}
           />
-        )}
-
-        { favorites.map((favePlace) => (
-            <Marker
-              key={favePlace._id}
-              title={favePlace.name}
-              description={favePlace.whose+"'s Favorite"}
-              coordinate={{
-               latitude: favePlace.location.coordinates[1], 
-               longitude: favePlace.location.coordinates[0]
-              }}
+          { userClick && (
+            <Marker 
+              title="Click here"
+              description="To save a new favorite"
+              coordinate={userClick}
+              onCalloutPress={saveFavorite}
+              pinColor="#008000"
             />
-        ))}
-      </MapView>
-      <Text style={styles.title}>Favorites List</Text>
-      <ScrollView>
-        { favorites.map((favePlace) => (
-          <View 
-            key={favePlace._id}
-            style={styles.faveCard}
-          >
-            <Text 
-              onPress={() => { favoriteClicked(favePlace) }}
-              style={styles.faveTitle}
+          )}
+
+          { favorites.map((favePlace) => (
+              <Marker
+                key={favePlace._id}
+                title={favePlace.name}
+                description={favePlace.whose+"'s Favorite"}
+                coordinate={{
+                latitude: favePlace.location.coordinates[1], 
+                longitude: favePlace.location.coordinates[0]
+                }}
+              />
+          ))}
+        </MapView>
+        <Text style={styles.title}>Favorites List</Text>
+        <ScrollView>
+          { favorites.map((favePlace) => (
+            <View 
+              key={favePlace._id}
+              style={styles.faveCard}
             >
-              {favePlace.name}
-            </Text>
-            <View style={styles.faveLocationRow}>
-              <FontAwesome5 name="globe" size={12} color="black" />
-              <Text style={styles.faveCoords}>{favePlace.location.coordinates[1]}, {favePlace.location.coordinates[0]}</Text>
+              <Text 
+                onPress={() => { favoriteClicked(favePlace) }}
+                style={styles.faveTitle}
+              >
+                {favePlace.name}
+              </Text>
+              <View style={styles.faveLocationRow}>
+                <FontAwesome5 name="globe" size={12} color="black" />
+                <Text style={styles.faveCoords}>{favePlace.location.coordinates[1]}, {favePlace.location.coordinates[0]}</Text>
+              </View>
+              <Text style={styles.favePerson}>by: {favePlace.whose}</Text>
             </View>
-            <Text style={styles.favePerson}>by: {favePlace.whose}</Text>
-          </View>
-        ))}
-      </ScrollView>
-      { loadError && <Text>{loadError.message}</Text>}
+          ))}
+        </ScrollView>
+        { loadError && <Text>{loadError.message}</Text>}
 
-      <FavoriteModal visible={showFavorite} onClose={() => setShowFavorite(false)}/>
+        <FavoriteModal visible={showFavorite} onClose={() => setShowFavorite(false)}/>
 
-    </View>
+      </View>
+
   );
 }
 

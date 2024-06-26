@@ -1,12 +1,25 @@
-import { useState } from "react";
+import { login, setApiCredentials } from "@/api";
+import { useContext, useState } from "react";
 import { Button, Modal, Text, TextInput, View } from "react-native";
+import LoginContext from "./LoginContext";
 
 export default function LoginModal({ visible, onClose}) {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
+    const [loginError, setLoginError] = useState('')
 
-    function tryLogin() {
-        console.log('Login with', username, password)
+    const loginContext = useContext(LoginContext)
+
+    async function tryLogin() {
+        try {
+            setLoginError('')
+            loginContext.tryLogin(username, password)
+            onClose()
+        }
+        catch (err) {
+            console.log(err)
+            setLoginError("Login Failed")
+        }
     }
 
     return (
@@ -39,6 +52,7 @@ export default function LoginModal({ visible, onClose}) {
                         onChangeText={setPassword}
                         secureTextEntry={true}
                     />
+                    {  loginError && <Text>{loginError}</Text> }
                     <Button title="Login" onPress={tryLogin} />
                     <Button title="Cancel" onPress={onClose} />
                 </View>
