@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { createFavoritePlace, getAllFavoritePlaces } from "../models/favoritePlaces.js";
+import authenticateWithBasic from "./authenticateWithBasic.js";
 
 let router = new Router()
 
@@ -14,10 +15,16 @@ router.get('/all', async (req, res) => {
     }
 })
 
-router.post('/create', async (req, res) => {
-    const { name, latitude, longitude, whose } = req.body
+router.post('/create', authenticateWithBasic, async (req, res) => {
+    const { name, latitude, longitude } = req.body
+    const { userName } = req.user
     try {
-        const newFavorite = await createFavoritePlace(name, latitude, longitude,  whose)
+        const newFavorite = await createFavoritePlace(
+            name, 
+            latitude, 
+            longitude, 
+            userName
+        )
         res.send(newFavorite)    
     }
     catch (err) {
