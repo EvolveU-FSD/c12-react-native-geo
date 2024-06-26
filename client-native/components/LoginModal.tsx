@@ -11,7 +11,12 @@ export default function LoginModal({ visible, onClose}) {
 
     return (
         <Modal transparent={true} visible={visible}>
-            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <View style={{ 
+                flex: 1, 
+                alignItems: 'center', 
+                justifyContent: 'center',
+                backgroundColor: '#00000040' 
+            }}>
                 <View style={{
                     alignItems: 'fill', 
                     justifyContent: 'center', 

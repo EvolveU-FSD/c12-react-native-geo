@@ -1,12 +1,17 @@
 import { useState } from "react";
 import { Button, Modal, Text, TextInput, View } from "react-native";
 
-export default function FavoriteModal({ visible, onClose}) {
+export default function FavoriteModal({ visible, onClose }) {
     const [name, setName] = useState('')
 
     return (
         <Modal transparent={true} visible={visible}>
-            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <View style={{ 
+                flex: 1, 
+                alignItems: 'center', 
+                justifyContent: 'center',
+                backgroundColor: '#00000040' 
+            }}>
                 <View style={{
                     alignItems: 'fill', 
                     justifyContent: 'center', 
