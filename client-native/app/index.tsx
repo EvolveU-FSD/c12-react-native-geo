@@ -5,12 +5,11 @@ import { getAllFavorites } from '../api.js';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import MapView, { Marker } from "react-native-maps";
 import FavoriteModal from "@/components/FavoriteModal";
-import { LoginProvider } from "@/components/LoginContext";
 
 export default function Index() {
 
   const [favorites, setFavorites] = useState([])
-  const [loadError, setLoadError] = useState(null)
+  const [loadError, setLoadError] = useState('')
 
   const [mapRegion, setMapRegion] = useState({
     latitude: 51.04560343757784, 
@@ -22,13 +21,34 @@ export default function Index() {
   const [userClick, setUserClick] = useState()
   const [showFavorite, setShowFavorite] = useState(false)
 
+  async function loadFavorites() {
+    try {
+      setLoadError('')
+      const favorites = await getAllFavorites()
+      setFavorites(favorites)
+    }
+    catch (err) {
+      console.log(err)
+      setLoadError(err.message)
+    }
+  }
 
   useEffect(() => {
-    getAllFavorites().then(setFavorites).catch(setLoadError)
+    loadFavorites()
   }, [])
 
-  const saveFavorite = useCallback(() => {
+  const promptToSaveFavorite = useCallback(() => {
     setShowFavorite(true)
+  }, [userClick])
+
+  const onNewFavoriteSave = useCallback(() => {
+    setShowFavorite(false)
+    loadFavorites()
+    setUserClick(undefined)
+  }, [userClick])
+
+  const onNewFavoriteCancel = useCallback(() => {
+    setShowFavorite(false)
   }, [userClick])
 
   function favoriteClicked(fave) {
@@ -64,7 +84,7 @@ export default function Index() {
               title="Click here"
               description="To save a new favorite"
               coordinate={userClick}
-              onCalloutPress={saveFavorite}
+              onCalloutPress={promptToSaveFavorite}
               pinColor="#008000"
             />
           )}
@@ -104,7 +124,12 @@ export default function Index() {
         </ScrollView>
         { loadError && <Text>{loadError.message}</Text>}
 
-        <FavoriteModal visible={showFavorite} onClose={() => setShowFavorite(false)}/>
+        <FavoriteModal 
+          visible={showFavorite} 
+          onSave={onNewFavoriteSave}
+          onCancel={onNewFavoriteCancel}
+          point={userClick}
+        />
 
       </View>
 

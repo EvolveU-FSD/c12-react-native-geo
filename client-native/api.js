@@ -20,7 +20,6 @@ export function hasApiCredentials() {
 
 function withCredentials(headers) {
     if (hasApiCredentials()) {
-        console.log('Adding credentials to http header for', username)
         headers['Authorization'] = 'Basic '+base64.encode(`${username}:${password}`)
     }
     return headers

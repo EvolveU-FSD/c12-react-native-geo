@@ -1,17 +1,36 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { Button, Modal, Text, TextInput, View } from "react-native";
-import LoginContext, { IfLoggedIn, IfNotLoggedIn } from "./LoginContext";
+import { IfLoggedIn, IfNotLoggedIn } from "./LoginContext";
 import LoginModal from "./LoginModal";
-import { hasApiCredentials } from "@/api";
+import { createFavorite, hasApiCredentials } from "@/api";
 
-export default function FavoriteModal({ visible, onClose }) {
+export default function FavoriteModal({ visible, point, onSave, onCancel }) {
     const [name, setName] = useState('')
+    const [saveError, setSaveError] = useState('')
 
-    const loginContext = useContext(LoginContext)
+    async function savePressed() {
+        try {
+            setSaveError('')
+            const newFavorite = await createFavorite(name, point.latitude, point.longitude)
+            setName('')
+            onSave()
+        }        
+        catch (err) {
+            console.log(err)
+            setSaveError(err.message)
+        }
+    }
+
+    async function cancelPressed() {
+        setName('')
+        setSaveError('')
+        onCancel()
+    }
+
     const loginClosed = () => {
         if (!hasApiCredentials()) {
             // user cancelled login, just close out of favorite add
-            onClose()
+            onCancel()
         }
     }
 
@@ -47,8 +66,9 @@ export default function FavoriteModal({ visible, onClose }) {
                                 value={name}
                                 onChangeText={setName}
                             />
-                            <Button title="Save" onPress={() => { console.log('Save' )}} />
-                            <Button title="Cancel" onPress={onClose} />
+                            { saveError && <Text>{saveError}</Text> }
+                            <Button title="Save" onPress={savePressed} />
+                            <Button title="Cancel" onPress={cancelPressed} />
                         </View>
                     </View>
                 </Modal>
