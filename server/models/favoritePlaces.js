@@ -11,7 +11,8 @@ const FavoritePlacesSchema = new Schema({
             type: [Number]
         }
     },
-    whose: String
+    whose: String,
+    isPublic: Boolean
 })
 
 FavoritePlacesSchema.index({ location: '2dsphere' });
@@ -22,14 +23,15 @@ export async function getAllFavoritePlaces(){
     return await FavoritePlaces.find()
 }
 
-export async function createFavoritePlace(name, latitude, longitude, whose) {
+export async function createFavoritePlace(name, latitude, longitude, whose, isPublic=true) {
     return FavoritePlaces.create({
         name, 
         location: {
             type: "Point",
             coordinates: [ longitude, latitude ]
         },
-        whose
+        whose,
+        isPublic
     })
 }
 

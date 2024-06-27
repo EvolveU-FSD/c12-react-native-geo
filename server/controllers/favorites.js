@@ -16,14 +16,15 @@ router.get('/all', async (req, res) => {
 })
 
 router.post('/create', authenticateWithBasic, async (req, res) => {
-    const { name, latitude, longitude } = req.body
+    const { name, latitude, longitude, isPublic } = req.body
     const { userName } = req.user
     try {
         const newFavorite = await createFavoritePlace(
             name, 
             latitude, 
             longitude, 
-            userName
+            userName,
+            isPublic
         )
         res.send(newFavorite)    
     }
