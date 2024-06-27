@@ -6,7 +6,7 @@ const UserSchema = new Schema({
     passwordHash: { type: String, select: false},
 })
 
-const User = mongoose.model("user", UserSchema)
+export const User = mongoose.model("user", UserSchema)
 
 export async function getAllUsers(){
     return await User.find()
