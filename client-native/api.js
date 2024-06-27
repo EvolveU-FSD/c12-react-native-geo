@@ -1,3 +1,4 @@
+import base64 from 'base-64'
 const baseUrl = process.env.EXPO_PUBLIC_BASE_URL
 
 let username = ''
@@ -8,11 +9,29 @@ export function setApiCredentials(user, pass) {
     password = pass
 }
 
+export function clearApiCredentials() {
+    username=''
+    password=''
+}
+
+export function hasApiCredentials() {
+    return username !== ''
+}
+
+function withCredentials(headers) {
+    if (hasApiCredentials()) {
+        console.log('Adding credentials to http header for', username)
+        headers['Authorization'] = 'Basic '+base64.encode(`${username}:${password}`)
+    }
+    return headers
+}
+
 async function getOrDie(path) {
     const url = baseUrl+path
-
-    console.log('Doing get for',path,'with credentials', { username, password })
-    const response = await fetch(url)
+    const response = await fetch(url,{
+        method: 'get',
+        headers: withCredentials({})
+    })
     if (response.status !== 200) {
         throw new Error('Failed to get ' + url + ' returned status ' + response.status)
     }
@@ -21,14 +40,11 @@ async function getOrDie(path) {
 
 async function postOrDie(path, payload) {
     const url = baseUrl+path
-
-    console.log('Doing post to',path,'with credentials', { username, password })
-
     const response = await fetch(url, {
         method: 'post',
-        headers: {
+        headers: withCredentials({
             "Content-Type": "application/json"
-        },
+        }),
         body: JSON.stringify(payload)
     })
     if (response.status !== 200) {
@@ -44,4 +60,8 @@ export async function getAllFavorites() {
 
 export async function login(username, password) {
     return postOrDie('/api/user/login', { username, password })
+}
+
+export async function createFavorite(name, latitude, longitude) {
+    return postOrDie('/api/favorites/create', { name, latitude, longitude })
 }

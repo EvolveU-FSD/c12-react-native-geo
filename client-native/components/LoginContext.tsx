@@ -1,4 +1,4 @@
-import { setApiCredentials, login } from "@/api"
+import { setApiCredentials, clearApiCredentials, login } from "@/api"
 import { createContext, useContext, useState } from "react"
 
 
@@ -13,6 +13,7 @@ export function LoginProvider({ children }) {
     const [loggedInUser, setLoggedInUser] = useState()
 
     async function tryLogin(username, password) {
+        console.log('Trying user login for', username, password)
         const user = await login(username, password)
         console.log("User credentials worked for", user)
         setLoggedInUser(user)
@@ -21,7 +22,7 @@ export function LoginProvider({ children }) {
 
     async function doLogout() {
         setLoggedInUser(undefined)
-        setApiCredentials('','')
+        clearApiCredentials()
     }
 
     return (

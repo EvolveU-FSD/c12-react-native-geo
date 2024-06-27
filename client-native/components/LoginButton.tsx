@@ -5,20 +5,21 @@ import LoginContext, { IfLoggedIn, IfNotLoggedIn } from "./LoginContext";
 
 export default function LoginButton() {
     const [showLogin, setShowLogin] = useState(false)
-    const loginContext = useContext(LoginContext)
+    const { logout } = useContext(LoginContext)
+
     return (
         <>
             <IfNotLoggedIn>
                 <Button
                     onPress={() => setShowLogin(true)}
-                    title="Login"
+                    title="Sign in"
                 />
                 <LoginModal visible={showLogin} onClose={() => setShowLogin(false)}/>
             </IfNotLoggedIn>
             <IfLoggedIn>
                 <Button
-                    onPress={() => loginContext.logout()}
-                    title="Logout"
+                    onPress={logout}
+                    title="Sign out"
                 />
             </IfLoggedIn>
         </>
