@@ -1,5 +1,5 @@
 import './globalSetup.js'
-import { checkPasswordAndReturnUserOrDie, createUser, getUserById, setPassword } from "../models/user"
+import { createUser, getUserById } from "../models/user"
 
 describe('user', () => {
     it('should find a user by id', async () => {
@@ -10,7 +10,7 @@ describe('user', () => {
         // execute
         const user = await getUserById(userId)
 
-        // assert 
+        // verify 
         expect(user.userName).toEqual(expectedUserName)
     })
 
@@ -22,7 +22,7 @@ describe('user', () => {
         // execute
         const user = await getUserById(userId)
 
-        // assert 
+        // verify 
         expect(user.userName).toEqual(expectedUserName)
         expect(user.passwordHash).not.toBeDefined()
     })
