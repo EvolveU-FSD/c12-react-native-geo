@@ -5,7 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "MONGODB_CONNECTION=mongodb://localhost:27017/favoritesTest node --experimental-vm-modules node_modules/jest/bin/jest.js"
+    "test-local": "MONGODB_CONNECTION=mongodb://localhost:27017/favoritesTest node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
   },
   "jest": {
     "testPathIgnorePatterns": [ "__tests__/globalSetup.js" ]

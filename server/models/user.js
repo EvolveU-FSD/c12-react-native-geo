@@ -37,8 +37,12 @@ export async function setPassword(userId, password) {
 }
 
 export async function checkPasswordAndReturnUserOrDie(userName, password){
+    if (!password) throw new Error('No password supplied')
+
     let user = await User.findOne({userName}).select('+passwordHash')
     if (!user) throw new Error('User not found "' + userName +'"') 
+    if (!user.passwordHash) throw new Error('User does not have a password set') 
+
     const match = await compare(password, user.passwordHash)
     if (!match) throw new Error('Password match failed')
     return await User.findById(user._id)
