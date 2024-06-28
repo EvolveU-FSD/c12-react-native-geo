@@ -2,6 +2,7 @@ import './globalSetup.js'
 import { createUser, getUserById } from "../models/user"
 
 describe('user', () => {
+    
     it('should find a user by id', async () => {
         // setup
         const expectedUserName = 'Tony'
