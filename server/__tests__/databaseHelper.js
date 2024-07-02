@@ -1,6 +1,6 @@
-import { connectionString, disconnectDb } from "../models/db"
-import { FavoritePlaces } from "../models/favoritePlaces"
-import { User } from "../models/user"
+import { connectionString, disconnectDb } from "../models/db.js"
+import { FavoritePlaces } from "../models/favoritePlaces.js"
+import { User } from "../models/user.js"
 
 beforeEach(async () => {
     if (!connectionString.endsWith('Test')) {

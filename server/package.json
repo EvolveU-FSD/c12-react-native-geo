@@ -9,7 +9,7 @@
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
   },
   "jest": {
-    "testPathIgnorePatterns": [ "__tests__/globalSetup.js" ]
+    "testPathIgnorePatterns": [ "__tests__/.*Helper.js", "__tests__/.*Fixture.js" ]
   },
   "author": "",
   "license": "ISC",

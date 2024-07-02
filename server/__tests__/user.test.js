@@ -1,4 +1,4 @@
-import './globalSetup.js'
+import './databaseHelper.js'
 import { checkPasswordAndReturnUserOrDie, createUser, getUserById, setPassword } from "../models/user"
 
 describe('user model', () => {
