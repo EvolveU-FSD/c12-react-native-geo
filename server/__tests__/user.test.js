@@ -128,6 +128,10 @@ describe('user model', () => {
         }     
     })
 
+    it.skip('setPassword should enforce complexity requirements', async() => {
+        throw new Error('unimplemented')
+    })
+
     it.skip('checkPassword should should lock out a user after a certain number of failed attempts', async() => {
         throw new Error('unimplemented')
     })

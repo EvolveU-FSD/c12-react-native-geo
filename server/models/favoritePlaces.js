@@ -19,8 +19,10 @@ FavoritePlacesSchema.index({ location: '2dsphere' });
 
 export const FavoritePlaces = mongoose.model("favoritePlaces", FavoritePlacesSchema)
 
-export async function getAllFavoritePlaces(){
-    return await FavoritePlaces.find()
+export async function getAllFavoritePlaces(userName){
+    const privatePlaces = await FavoritePlaces.find({isPublic: false, whose: userName})
+    const publicPlaces = await FavoritePlaces.find({isPublic: true})
+    return privatePlaces.concat(publicPlaces)
 }
 
 export async function createFavoritePlace(name, latitude, longitude, whose, isPublic=true) {
